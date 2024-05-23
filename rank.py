@@ -35,6 +35,18 @@ class Rank:
     def __lt__(self, other):
         return self.index < other.index;
 
+    def __le__(self, other):
+        return self.index <= other.index;
+
+    def __gt__(self, other):
+        return self.index > other.index;
+
+    def __ge__(self, other):
+        return self.index >= other.index;
+
+    def __hash__(self):
+        return hash(self.index);
+
     @staticmethod
     def fromString(rankStr):
         return Rank(Rank.rank2index[rankStr]);
