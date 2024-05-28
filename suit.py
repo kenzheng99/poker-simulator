@@ -32,7 +32,10 @@ class Suit:
 
     @staticmethod
     def fromString(suitStr):
-        return Suit(Suit.suit2index[suitStr]);
+        suitStrUpdated = suitStr.lower();
+        if suitStrUpdated not in Suit.suit2index.keys():
+            raise ValueError(f"cannot parse suit: {suitStr}");
+        return Suit(Suit.suit2index[suitStrUpdated]);
 
     @staticmethod
     def random():

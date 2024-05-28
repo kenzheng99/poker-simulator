@@ -49,11 +49,14 @@ class Rank:
 
     @staticmethod
     def fromString(rankStr):
-        return Rank(Rank.rank2index[rankStr]);
+        rankStrUpdated = rankStr.upper();
+        if rankStrUpdated not in Rank.rank2index.keys():
+            raise ValueError(f"cannot parse rank: {rankStr}");
+        return Rank(Rank.rank2index[rankStrUpdated]);
 
     @staticmethod
     def random():
-        return Rank(random.randint(0, 12))
+        return Rank(random.randint(0, 12));
 
 
 if __name__ == '__main__':

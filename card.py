@@ -22,10 +22,17 @@ class Card:
 
     @staticmethod
     def fromString(cardStr: str):
-        rank = Rank.fromString(cardStr[0])
-        suit = Suit.fromString(cardStr[1])
-        index = suit.index * 13 + rank.index
-        return Card(index)
+        cardStrUpdated = cardStr.replace("10", "T"); # special case for handling tens
+        if len(cardStrUpdated) != 2:
+            raise ValueError(f"can't parse card: {cardStr}");
+        try:
+            rank = Rank.fromString(cardStrUpdated[0]);
+            suit = Suit.fromString(cardStrUpdated[1]);
+        except ValueError:
+            raise ValueError(f"can't parse card: {cardStr}");
+
+        index = suit.index * 13 + rank.index;
+        return Card(index);
 
     @staticmethod
     def random():
