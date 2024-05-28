@@ -6,33 +6,68 @@ from handValue import HandValue
 class Hand:
     def __init__(self, cards: list[Card]):
         self.cards = sorted(cards);
-        self.deck = Deck();
+        self.deck = Deck();           
+        for card in cards:
+            self.deck.remove(card);
+        self.value = None;
 
     def __str__(self):
         return " ".join([str(card) for card in self.cards])
 
+    def replace(self, indices):
+        for i in indices:
+            self.cards[i] = self.deck.draw();
+        self.cards.sort();
+        self.value = None;
+
     def calculateValue(self, enable_jacks=True):
+        if self.value: 
+            return self.value;
+
         if Hand.isRoyalFlush(self):
-            return HandValue.ROYAL_FLUSH;
-        if Hand.isStraightFlush(self):
-            return HandValue.STRAIGHT_FLUSH;
-        if Hand.isQuads(self):
-            return HandValue.QUADS;
-        if Hand.isFullHouse(self):
-            return HandValue.FULL_HOUSE;
-        if Hand.isFlush(self):
-            return HandValue.FLUSH;
-        if Hand.isStraight(self):
-            return HandValue.STRAIGHT;
-        if Hand.isTriplets(self):
-            return HandValue.TRIPLETS;
-        if Hand.isTwoPair(self):
-            return HandValue.TWO_PAIR;
-        if enable_jacks and Hand.isJacksOrBetter(self):
-            return HandValue.JACKS_OR_BETTER;
-        if Hand.isPair(self):
-            return HandValue.PAIR;
-        return HandValue.NONE;
+            self.value = HandValue.ROYAL_FLUSH;
+        elif Hand.isStraightFlush(self):
+            self.value = HandValue.STRAIGHT_FLUSH;
+        elif Hand.isQuads(self):
+            self.value = HandValue.QUADS;
+        elif Hand.isFullHouse(self):
+            self.value = HandValue.FULL_HOUSE;
+        elif Hand.isFlush(self):
+            self.value = HandValue.FLUSH;
+        elif Hand.isStraight(self):
+            self.value = HandValue.STRAIGHT;
+        elif Hand.isTriplets(self):
+            self.value = HandValue.TRIPLETS;
+        elif Hand.isTwoPair(self):
+            self.value = HandValue.TWO_PAIR;
+        elif enable_jacks and Hand.isJacksOrBetter(self):
+            self.value = HandValue.JACKS_OR_BETTER;
+        elif Hand.isPair(self):
+            self.value = HandValue.PAIR;
+        else:
+            self.value = HandValue.NONE;
+
+        return self.value;
+
+    def calculateScore(self):
+        if not self.value:
+            self.calculateValue();
+
+        score_map = {
+            HandValue.ROYAL_FLUSH: 5000,
+            HandValue.STRAIGHT_FLUSH: 1500,
+            HandValue.QUADS: 600,
+            HandValue.FULL_HOUSE: 300,
+            HandValue.FLUSH: 200,
+            HandValue.STRAIGHT: 125,
+            HandValue.TRIPLETS: 75,
+            HandValue.TWO_PAIR: 40,
+            HandValue.JACKS_OR_BETTER: 10,
+            HandValue.PAIR: 0,
+            HandValue.NONE: 0
+        }
+
+        return score_map[self.value];
 
 
     @staticmethod
@@ -104,7 +139,8 @@ class Hand:
     @staticmethod
     def isJacksOrBetter(hand):
         pairs = Hand.getPairs(hand);
-        return len(pairs) == 1 and pairs[0] >= Rank.fromString('J');
+        return len(pairs) == 1 and (
+                pairs[0] >= Rank.fromString('J') or pairs[0] == Rank.fromString('A'));
 
     @staticmethod
     def isPair(hand):
@@ -139,7 +175,7 @@ if __name__ == '__main__':
     ]))
 
     straightHand = Hand.fromString('5d 6h 7c 8s 9d');
-    print(f'{straightHand} is straight: {Hand.isStraight(straightHand)}');
+    print(f'{straightHand} is straight: {Hand.isStraight(straightHand)}, score: {straightHand.calculateScore()}');
 
     flushHand = Hand.fromString('6h 9h Th Jh Kh');
     print(f'{flushHand} is flush: {Hand.isFlush(flushHand)}');
@@ -162,7 +198,7 @@ if __name__ == '__main__':
     twoPairHand = Hand.fromString('3s 3d 8s 8h 9d');
     print(f'{twoPairHand} is two pair: {Hand.isTwoPair(twoPairHand)}');
 
-    jackPairHand = Hand.fromString('Jd Js Ad Kh 5d');
+    jackPairHand = Hand.fromString('Ad As Jd Kh 5d');
     print(f'{jackPairHand} is jack pair: {Hand.isJacksOrBetter(jackPairHand)}');
 
     pairHand = Hand.fromString('8d 8s 3d Kh 5d');
@@ -173,4 +209,5 @@ if __name__ == '__main__':
     randomHand = Hand.random();
     print(f'{randomHand} is {randomHand.calculateValue()}')
 
-        
+    straightHand.replace([0, 2, 4]);
+    print(f'after replace: {straightHand}')

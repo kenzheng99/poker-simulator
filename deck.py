@@ -6,13 +6,13 @@ class Deck:
     def __init__(self):
         self.deck = list(range(0, 52));
 
-    def draw(self, num):
+    def draw(self, num=1):
         choices = []
         for i in range(num):
             choice = random.choice(self.deck)
             self.deck.remove(choice)
             choices.append(Card(choice))
-        return choices;
+        return choices[0] if num == 1 else choices;
 
     def remove(self, card):
         self.deck.remove(card.index)
