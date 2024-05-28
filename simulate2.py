@@ -47,7 +47,7 @@ def simulate_replacements(cards, num_iters):
         (0, 2, 3, 4),
         (1, 2, 3, 4),
         (0, 1, 2, 3, 4),
-    ]
+    ][::-1];
     for combination in replacement_combinations:
         ev = simulate_replacement(cards, combination, num_iters);
         ev_counter[combination] = ev;
@@ -86,7 +86,7 @@ def simulate_replacement(cards, replace_indices, num_iters):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--num_iters', type=int, default=1000);
+    parser.add_argument('-i', '--num_iters', type=int, default=10000);
     parser.add_argument('card1');
     parser.add_argument('card2');
     parser.add_argument('card3');

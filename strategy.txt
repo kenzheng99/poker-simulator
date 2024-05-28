@@ -1,0 +1,7 @@
+confirmed royal/straight flush/quads/full house/flush/straight/trips/twopair
+confirmed jack pair
+confirmed pair
+3 cards suited
+suited connectors
+face card high (only one)
+
