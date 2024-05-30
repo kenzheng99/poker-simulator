@@ -1,4 +1,4 @@
-import sys
+import argparse
 from collections import Counter
 from tqdm import tqdm
 
@@ -26,8 +26,7 @@ def simulate_no_draw(num_iters):
 
 
 if __name__ == "__main__":
-    num_iters = 1000
-    if len(sys.argv) == 2:
-        num_iters = int(sys.argv[1])
-
-    simulate_no_draw(num_iters)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i", "--num-iters", type=int, default=10000)
+    args = parser.parse_args()
+    simulate_no_draw(args.num_iters)

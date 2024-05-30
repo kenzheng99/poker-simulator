@@ -1,9 +1,7 @@
-import sys
 from collections import Counter
 from tqdm import tqdm
 import argparse
 from hand import Hand
-from handValue import HandValue
 
 
 def print_counter(counter, total_iters):
