@@ -4,7 +4,7 @@ from rank import Rank
 from handValue import HandValue
 
 class Hand:
-    def __init__(self, cards: list[Card]):
+    def __init__(self, cards):
         self.cards = sorted(cards);
         self.deck = Deck();           
         for card in cards:
